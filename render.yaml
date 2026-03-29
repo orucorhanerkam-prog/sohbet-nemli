@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: mavi-siyah-sohbet
+    runtime: python
+    repo: https://github.com/sizin-kullanici-adiniz/sohbet-repo  # Kendi repo adresinizle değiştirin
+    plan: free
+    region: frankfurt  # veya singapore, oregon
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 sohbet:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_9eNwSgZnL6Mq@ep-broad-moon-anjzygzz-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require
+    healthCheckPath: /
+    autoDeploy: true
