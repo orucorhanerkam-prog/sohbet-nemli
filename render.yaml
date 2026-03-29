@@ -2,15 +2,17 @@ services:
   - type: web
     name: mavi-siyah-sohbet
     runtime: python
-    repo: https://github.com/sizin-kullanici-adiniz/sohbet-repo  # Kendi repo adresinizle değiştirin
+    repo: https://github.com/sizin-kullanici-adiniz/sohbet-repo
     plan: free
-    region: frankfurt  # veya singapore, oregon
+    region: frankfurt
     branch: main
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class eventlet -w 1 sohbet:app
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 --threads 100 --timeout 120 --keep-alive 5 sohbet:app
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: 3.11.0  # eventlet ile daha uyumlu
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
