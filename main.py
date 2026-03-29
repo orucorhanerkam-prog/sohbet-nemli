@@ -507,7 +507,19 @@ def handle_disconnect():
 
 # ------------------- Çalıştırma -------------------
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+    
     print("💙 Mavi-Siyah Sohbet Sistemi başlıyor...")
-    print("🔐 Kayıt/Giriş sistemi aktif | Veritabanı: Neon PostgreSQL")
-    print("📍 http://127.0.0.1:5000")
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    print(f"🔐 Kayıt/Giriş sistemi aktif | Veritabanı: Neon PostgreSQL")
+    print(f"📍 Port: {port}")
+    
+    # Render'da WebSocket için özel ayarlar
+    socketio.run(
+        app, 
+        host='0.0.0.0', 
+        port=port, 
+        debug=debug,
+        allow_unsafe_werkzeug=True  # Render için
+    )
